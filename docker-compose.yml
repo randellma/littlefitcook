@@ -1,0 +1,26 @@
+version: "3.3"
+services:
+  littlefitcook:
+    image: wordpress
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: littleuser
+      WORDPRESS_DB_PASSWORD: littlepass
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    restart: always
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: littleuser
+      MYSQL_PASSWORD: littlepass
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./wordpress.sql:/docker-entrypoint-initdb.d/wordpress.sql
+      - ./scripts/wordpress_update.sql:/docker-entrypoint-initdb.d/wordpress_update.sql
